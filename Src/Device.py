@@ -453,10 +453,10 @@ class Device(QObject):
                     return self.mumu["handleNum"] if Handle.checkStatus(self.mumu["handleNum"]) else None
                 elif self.mumu["connectType"] == "window后台":
                     self.mumu["handleNum"] = Handle.getHandleNum(self.mumu["handleTitle"])
-                    self.mumu["pHandleNum"] = Handle.getParentHandleNum(self.mumu["handleNum"])
                     Log4().log("info", f'连接mumu模拟器, handleTitle:{self.mumu["handleTitle"]}, handleNum:{self.mumu["handleNum"]}')
                     if self.mumu["handleNum"] == 0:
                         Log4().log("info", "无法连接mumu模拟器, 请确保模拟器正常运行")
+                    self.mumu["pHandleNum"] = Handle.getParentHandleNum(self.mumu["handleNum"])
                     return self.mumu["handleNum"] if Handle.checkStatus(self.mumu["handleNum"]) else None
             case "雷电模拟器" :
                 if self.leidian["connectType"] == "adb":

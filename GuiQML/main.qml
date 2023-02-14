@@ -7,6 +7,8 @@ import Qt5Compat.GraphicalEffects
 
 import "./Pane"
 import "./Body"
+import "./Component"
+import "./Component/ajax.js" as Ajax
 
 
 Window {
@@ -231,7 +233,7 @@ Window {
                 anchors.left: appName.right
                 anchors.leftMargin: 4
                 anchors.bottom: parent.bottom
-                text: qsTr("V0.2-beta")
+                text: qsTr("v0.3-beta")
                 color: "#FFCC00"
                 font.bold: false
                 font.pixelSize: 12
@@ -267,6 +269,30 @@ Window {
             id: snackbar
         }
     }
+    //更新对话框
+    UDialog{
+        id:updaeDialog
+        TextArea{
+            id:infoText
+            anchors.fill: parent
+        }
+
+        function buttonClicked(label){
+            updaeDialog.close()
+        }
+        Component.onCompleted: {
+           updaeDialog.footerButtonClicked.connect(buttonClicked)
+           Ajax.get("https://api.github.com/repos/runhey/Uowl/releases/latest",
+                    function(result, json){         //成功后的回调函数
+                        if(json["tag_name"]!==appVersion.text){
+                            updaeDialog.title = "最新版本"+json["tag_name"]
+                            infoText.text = json["body"].substring(0, json["body"].indexOf('\r\n### 下载使用',0))
+                            updaeDialog.open()
+                        }
+                    },function (){              //失败后的回调函数
+                        console.log("error")
+                    })
+        }}
     //改变鼠标形状
     MouseArea {
         anchors.fill: parent

@@ -191,7 +191,7 @@
 ~~~
 Uowl
 ├─GuiQML								前端UI文件
-├─GuiImage                              前端UI切图
+├─GuiImage                                                              前端UI切图
 │  ├─background
 │  ├─configelement
 │  ├─logo
@@ -201,20 +201,20 @@ Uowl
 ├─Docs									文档
 ├─Tools									辅助工具，具体请读对应readme
 ├─Src									python文件以及一些dll
-│  ├─Component							一些自定义的组件
+│  ├─Component		                      	                        一些自定义的组件
 │  ├─Task								每个任务的运行
 ├─Tasks									每个任务具体的配置
-│  ├─DefaultGroup						一些特殊的任务
+│  ├─DefaultGroup						        一些特殊的任务
 │  	 ├─Before							每个任务循环的前置判断
 │  	 ├─Slice 							切图，统一
 │  	 ├─Template							任务模板
-│  ├─DailyGroup							每日任务
-│  ├─WeeklyGroup						每周任务
-│  ├─御魂Group						   针对御魂而抽离出来的一个组
-│  ├─活动Group						   活动任务
-├─Tasks									配置文件
-│  ├─setting.json						软件设置文件
-│  ├─taskScheduler.json					任务时间安排文件
+│  ├─DailyGroup							        每日任务
+│  ├─WeeklyGroup						        每周任务
+│  ├─御魂Group						                针对御魂而抽离出来的一个组
+│  ├─活动Group						                活动任务
+├─Tasks								        配置文件
+│  ├─setting.json						        软件设置文件
+│  ├─taskScheduler.json					                任务时间安排文件
 ~~~
 
 

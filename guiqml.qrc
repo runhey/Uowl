@@ -27,5 +27,6 @@
         <file>GuiQML/Component/UTimeSelect.qml</file>
         <file>GuiQML/Component/UTumbler.qml</file>
         <file>GuiQML/Component/UDailySelect.qml</file>
+        <file>GuiQML/Component/ajax.js</file>
     </qresource>
 </RCC>
