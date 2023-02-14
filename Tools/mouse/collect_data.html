@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .mcontiner {
+            position: relative;
+            width: 400px;
+            height: 34px;
+            background-color: #ccc;
+            /*border: 1px solid #000;*/
+            margin: 50px auto;
+        }
+
+        .btn {
+            position: absolute;
+            top: 0;
+            width: 40px;
+            height: 32px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            cursor: pointer;
+            color: #ccc;
+            text-align: center;
+            line-height: 32px;
+            z-index: 5;
+        }
+
+        .text {
+            position: absolute;
+            width: 100%;
+            line-height: 34px;
+            text-align: center;
+            z-index: 3;
+        }
+
+        .bg {
+            position: absolute;
+            height: 100%;
+            background-color: red;
+            z-index: 1;
+        }
+
+        .dot {
+            width: 1px;
+            height: 1px;
+            background-color: red;
+            position: absolute;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<h1>在线网络考试demo：</h1>
+<h2>question1</h2>
+<input type="radio" name="question1">A.xxxxx</br>
+
+<input type="radio" name="question1">B.xxxxx</br>
+<input type="radio" name="question1">C.xxxxx</br>
+<input type="radio" name="question1">D.xxxxx</br>
+</br>
+<h2>question2</h2>
+<input type="radio" name="question2">A.xxxxx</br>
+<input type="radio" name="question2">B.xxxxx</br>
+<input type="radio" name="question2">C.xxxxx</br>
+<input type="radio" name="question2">D.xxxxx</br>
+</br>
+<h2>question3</h2>
+<input type="radio" name="question3">A.xxxxx</br>
+<input type="radio" name="question3">B.xxxxx</br>
+<input type="radio" name="question3">C.xxxxx</br>
+<input type="radio" name="question3">D.xxxxx</br>
+</br></br></br>
+<h1>滑块验证码demo：</h1>
+<div class="mcontiner">
+    <div class="btn">>></div>
+    <p class="text">拖动滑块完成验证</p>
+    <div class="bg"></div>
+</div>
+</br>
+</br>
+
+<button onclick="submit()">提交</button>
+<!--submit-->
+<script>
+    function submit() {
+        console.log(points);
+        $.ajax({
+            url: 'http://127.0.0.1:5000/predict',
+            data: JSON.stringify(points),
+            type: 'POST',
+            dataType: 'json',
+            contentType: "application/json",
+            success: function (res) {
+                console.log(res)
+            },
+            fail: function (res) {
+            },
+            error: function (res) {
+            }
+        })
+
+    };
+</script>
+
+<!--slider-->
+<script>
+    window.onload = function () {
+        //获取元素
+        var mc = document.getElementsByClassName("mcontiner")[0];
+        var btn = document.querySelector(".btn");
+        var mtext = document.getElementsByTagName("p")[0];
+        var bg = document.querySelector(".bg");
+        var boo = false;
+        //添加事件
+        btn.onmousedown = function (event) {
+            event = event || window.event;
+            var downX = event.clientX;
+            btn.onmousemove = function (event) {
+                event = event || window.event;
+                var moveX = event.clientX - downX;
+                var chaX = mc.offsetWidth - btn.offsetWidth;
+                if (moveX >= 0 && moveX < chaX) {
+                    this.style.left = moveX + "px";
+                    bg.style.width = moveX + "px";
+                }
+                if (moveX >= chaX) {
+                    mtext.innerHTML = "<b>验证通过</b>";
+                    this.style.left = chaX + "px";
+                    bg.style.width = chaX + "px";
+                    bg.style.backgroundColor = "green";
+                    btn.onmousedown = null;
+                    btn.onmousemove = null;
+                    boo = true;
+                }
+
+            }
+        };
+        window.onmouseup = function () {
+            btn.onmousemove = null;
+            if (!boo) {
+                btn.style.left = 0;
+                bg.style.width = 0;
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/underscore.js/1.9.1/underscore.js"></script>
+
+
+<script>
+    let points = [];
+    let count = 0;
+    let time_last = 0;
+
+
+    function handleMouseMove(event) {
+        let dot, eventDoc, doc, body, pageX, pageY;
+
+        event = event || window.event; // IE-ism
+
+        // If pageX/Y aren't available and clientX/Y
+        // are, calculate pageX/Y - logic taken from jQuery
+        // Calculate pageX/Y if missing and clientX/Y available
+        if (event.pageX == null && event.clientX != null) {
+            eventDoc = (event.target && event.target.ownerDocument) || document;
+            doc = eventDoc.documentElement;
+            body = eventDoc.body;
+
+            event.pageX = event.clientX +
+                (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+                (doc && doc.clientLeft || body && body.clientLeft || 0);
+            event.pageY = event.clientY +
+                (doc && doc.scrollTop || body && body.scrollTop || 0) -
+                (doc && doc.clientTop || body && body.clientTop || 0);
+        }
+        count += 1
+        //Add a dot to follow the cursor
+        dot = document.createElement('div');
+        dot.className = "dot";
+        dot.style.left = event.pageX + "px";
+        dot.style.top = event.pageY + "px";
+        let t = new Date().getTime();
+        points.push([event.pageX, event.pageY, t]);
+        console.log(count, event.pageX, event.pageY, t,t-time_last);
+        document.body.appendChild(dot);
+        time_last = t
+    }
+
+    document.onmousemove = _.throttle(handleMouseMove, 5);
+</script>
+
+<!--ref:https://blog.csdn.net/Tonglanlinling/article/details/89048271-->
+<!--ref:https://wow.techbrood.com/fiddle/53619-->
