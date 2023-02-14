@@ -39,7 +39,7 @@ class Log4(QObject):
         :return:
         """
         if self.record == 'open':
-            nowDateTime:str = datetime.now().strftime("%m-%d^%H:%M")
+            nowDateTime:str = datetime.now().strftime("%m-%d^%H-%M")
             self.fTxt = open(os.fspath(Path(__file__).resolve().parent.parent / "Log/" / ('%s@%s'%(nowDateTime,taskName)+".txt")), 'a', encoding='utf-8')
             self.fCsv = open(os.fspath(Path(__file__).resolve().parent.parent / "Log/" / ('%s@%s'%(nowDateTime,taskName)+".csv")), 'a', encoding='utf-8')
             self.wCsv = csv.writer(self.fCsv, dialect= "excel")

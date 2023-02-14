@@ -364,8 +364,17 @@ class Handle():
         """
         interval: int = 8  # 每次移动的间隔时间
         numberList :int = int(dist(startPos, endPos)/(1.5*interval))  # 表示每秒移动1.5个像素点， 总的时间除以每个点10ms就得到总的点的个数
-        trace :list = BezierTrajectory.trackArray(start=startPos, end=endPos, numberList=numberList, le=3,
-                     deviation=30, bias=0.5, type=3, cbb=0, yhh=10)
+        le = random.randint(2, 4)  #
+        deviation = random.randint(20, 40)  # 幅度
+        type = 3
+        obbsType = random.random()   # 0.8的概率是先快中间慢后面快， 0.1概率是先快后慢， 0.1概率先慢后快
+        if obbsType>0 and obbsType <=0.8:
+            type = 3
+        elif obbsType<0.9:
+            type = 2
+        else: obbsType = 1
+        trace :list = BezierTrajectory.trackArray(start=startPos, end=endPos, numberList=numberList, le=4,
+                     deviation=30, bias=0.5, type=3, cbb=0, yhh=20)
 
         PostMessage(handleNum, WM_ACTIVATE, WA_ACTIVE, 0)  # 激活窗口
         # 先移动到第一个点
@@ -613,7 +622,7 @@ class Device(QObject):
 # h = Handle()
 # handleNum = h.getHandleNum("MuMu模拟器")
 # mouseTrack = MouseTrack(h.swipe(handleNum, [201,440], [800, 440]))
-mouseTrack.show_track(x_min=0, y_min=0, x_max=1280, y_max=720)
+# mouseTrack.show_track(x_min=0, y_min=0, x_max=1280, y_max=720)
 
 
 # adb = Adb()

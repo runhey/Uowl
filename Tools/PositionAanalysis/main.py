@@ -12,8 +12,7 @@ from pathlib import Path
 # 路径 默认是 ./Uowl/Log
 csvPath = Path(__file__).resolve().parent.parent.parent / 'Log'
 # 文件列表 请改成路径下的
-csvFileList = ['02-14^00@地域鬼王.csv',
-               '02-14^00@突破.csv']
+csvFileList = ["02-14^15-20@swipedtest.csv"]
 # 图的大小 默认1280x720
 csvSize = [1280, 720]
 
@@ -43,12 +42,14 @@ def showCsv(xList :list, yList :list, size :list) -> None:
     mpl.style.use("seaborn-v0_8-dark")
     mpl.rcParams["figure.dpi"] = 300
 
-    ax.invert_yaxis()
+    ax.xaxis.set_ticks_position('top')
+    # ax.invert_yaxis()
     ax.set_xlim((0, size[0]))
-    ax.set_ylim((0, size[1]))
+    ax.set_ylim((size[1], 0))
     plt.scatter(x, y, s=np.ones(x.size))
-    plt.title("position")
+    plt.title("position number: " + str(x.size))
     plt.show()
+    fig.savefig("position.png")
 
 
 if __name__ == '__main__':
