@@ -56,3 +56,6 @@ compile_commands.json
 !/Src/AdbWinApi.dll
 !/Src/AdbWinUsbApi.dll
 !AdbWinApi.dll
+!/Tools/Spyxx/spyxxhk.dll
+!/Tools/Spyxx/spyxxhk_and64.dll
+

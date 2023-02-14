@@ -613,7 +613,7 @@ class Device(QObject):
 # h = Handle()
 # handleNum = h.getHandleNum("MuMu模拟器")
 # mouseTrack = MouseTrack(h.swipe(handleNum, [201,440], [800, 440]))
-# mouseTrack.show_track(x_min=0, y_min=0, x_max=1280, y_max=720)
+mouseTrack.show_track(x_min=0, y_min=0, x_max=1280, y_max=720)
 
 
 # adb = Adb()
