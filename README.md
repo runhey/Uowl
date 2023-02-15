@@ -24,13 +24,32 @@
 
   + 克隆或者下载 本项目
 
-  + 安装库具体看**requirements.txt**, 其中graphviz和python-graphviz这个两个库不影响功能，库版本过高可自行回退
+  + 安装库具体看**requirements.txt**
 
     ~~~powershell
     pip install -r requirements.txt
     ~~~
 
-  + 运行 main.py
+  + 接下来安装cnocr，这个比较特殊
+
+    ~~~
+    pip install cnocr
+    ~~~
+
+    如果不出意外的话会报错不能安装**Polygon3**
+
+    ~~~python
+    Microsoft Visual C++ 14.0 or greater is required. Get it with “Microsoft C++ Build Tools”: https://visualstudio.microsoft.com/visual-cpp-build-tools/   
+    # 因为pip安装的时候 会重新编译一下，而这个包里面有c++文件但是你的电脑没有这个对应的构建工具，无法编译、无法安装，所以要安装我已经编译好的whl文件，运行下面的指令
+    ~~~
+
+    + ~~~python
+      pip install wheel
+      pip install pip install ./Src/Task/Polygon3-3.0.9.1-cp310-cp310-win_amd64.whl
+      # 我电脑是amd64的
+      ~~~
+
+  + 安装库之后，运行 main.py
 
   + 打包项目可看[Uowl/Docs/打包项目](https://github.com/runhey/Uowl/blob/master/Docs/打包项目.md)
 

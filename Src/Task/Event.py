@@ -2,13 +2,18 @@
 # @author runhey
 # github https://github.com/runhey
 # 图像事件，变量事件，时间时间，随机事件,
+import time
+
 import cv2
 
 from PySide6.QtCore import QObject, Signal
 from numpy import float32, int32, uint8, fromfile
 from pathlib import Path
+# from cnocr import CnOcr
+# 这个ocr使得脚本启动时间从1.9变成了6.9足足多了5秒
 
 from Src.Log4 import Log4
+from Src.Device import Handle
 
 class ImgEvent(QObject):
     sigEvent = Signal(dict)   # 匹配到后发送事件
@@ -238,3 +243,86 @@ class IntVarEvent(QObject):
 # print(vint.deal())
 # vint.value=5
 # print(vint.deal())
+
+class OcrEvent(QObject):
+    sigEvent = Signal(dict)  # 匹配到后发送事件
+    def __init__(self, string :str, threshold :float, type : int,
+                 x0 :float, width :float, y0 :float, height :float,
+                 eventInfo :dict) -> None:
+        """
+
+        :param string:  要匹配的文字，
+        :param threshold: 阈值
+        :param type: 水平还是横的 1表示单行水平， 2表示竖直的文字
+        :param x0:
+        :param width:
+        :param y0:
+        :param height:
+        :param eventInfo: 信息，待定
+        """
+        super(OcrEvent, self).__init__()
+        self.string = string
+        self.threshold = threshold
+        self.type = type
+        self.x0 = x0
+        self.y0 =y0
+        self.width = width
+        self.height = height
+        self.eventInfo = eventInfo
+        # 开始配置
+        match self.type:
+            case 1:
+                self.ocr = CnOcr()
+            case 2:
+                self.ocr = CnOcr(rec_model_name='ch_PP-OCRv3')
+
+    def deal(self, scrImg) -> None:
+        """
+
+        :param scrImg: 截取的整个图片
+        :return: 如果识别得到则返回对应中心坐标，否则NONE
+        """
+        # 裁剪图片
+        width, height = scrImg.shape[1], scrImg.shape[0]  # 这个是图片压缩后的大小
+        if self.x0 + self.width > 1:
+            xStart = int(width * self.x0)
+            xEnd = int(width)
+        else:
+            xStart = int(width * self.x0)
+            xEnd = int(width * self.x0 + width * self.width)
+
+        if self.y0 + self.height > 1:
+            yStart = int(height * self.y0)
+            yEnd = int(height)
+        else:
+            yStart = int(height * self.y0)
+            yEnd = int(height * self.y0 + height * self.height)
+        cropImg = scrImg[yStart:yEnd, xStart:xEnd]  # 矩阵的第一项就是图片的y
+
+        # cv2.namedWindow('scrImg')  # 命名窗口
+        # cv2.imshow("scrImg", cropImg)  # 显示
+        # cv2.waitKey(0)
+        # print("开始识别")
+        # cv2.destroyAllWindows()
+
+        # 开始识别
+        match self.type:
+            case 1:
+                out = self.ocr.ocr(cropImg)
+            case 2:
+                out = self.ocr.ocr(cropImg)
+        for one in out:
+            if -1 != one["text"].find(self.string):
+                centerX = (one["position"][0][0] + one["position"][2][0])/2 + (self.x0 * width)
+                centerY = (one["position"][0][1] + one["position"][2][1]) / 2 + (self.y0 * height)
+                return [centerX, centerY]
+        return None
+
+    def test(self) -> None:
+        h = Handle()
+        handleNum = h.getHandleNum("雷电模拟器")
+        scrImg = h.getScreen(handleNum, [1280, 720], scaleRate=1.0)
+        print(self.deal(scrImg))
+
+# OcrEvent("游戏", 0.80, 1, 0.4, 0.26, 0.75, 0.12, {"eventName":"test"}).test()
+
