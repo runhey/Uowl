@@ -1,19 +1,22 @@
 # This Python file uses the following encoding: utf-8
 # @author runhey
 # github https://github.com/runhey
-from time import sleep
-
+import sys
 import json
+import time
+import importlib.util
 
 from numpy import random
 from PySide6.QtCore import QThread, QObject, Signal, Slot
 from apscheduler.schedulers.blocking import BlockingScheduler
+from pathlib import Path
 
 from Src.Log4 import Log4, singleton
 from Src.ConfigFile import ConfigFile
 from Src.Bridge import Bridge
 from Src.Device import Device
 from Src.Task.Task import Task
+from Src.Task.TaskLoad import loadStateModule, getAllStateModule
 
 
 
@@ -184,3 +187,9 @@ class TaskScheduler(QThread):
 
 
 
+def loadTask(taskGroup :str, taskName :str) -> None:
+    tasksFile = str(Path(__file__).resolve().parent.parent / "Tasks" / taskGroup / taskName / "UTask.py")
+    print(tasksFile)
+    loadStateModule('UTask', tasksFile).UTask().run()
+
+# loadTask("DailyGroup", "地域鬼王")

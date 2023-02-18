@@ -40,6 +40,9 @@ class Log4(QObject):
         """
         if self.record == 'open':
             nowDateTime:str = datetime.now().strftime("%m-%d^%H-%M")
+            logPath = Path(Path(__file__).resolve().parent.parent / "Log/")
+            if not logPath.exists():
+                Path.mkdir(logPath)
             self.fTxt = open(os.fspath(Path(__file__).resolve().parent.parent / "Log/" / ('%s@%s'%(nowDateTime,taskName)+".txt")), 'a', encoding='utf-8')
             self.fCsv = open(os.fspath(Path(__file__).resolve().parent.parent / "Log/" / ('%s@%s'%(nowDateTime,taskName)+".csv")), 'a', encoding='utf-8')
             self.wCsv = csv.writer(self.fCsv, dialect= "excel")
@@ -94,5 +97,3 @@ class Log4(QObject):
         """
         if self.fCsv is not None and self.wCsv is not None:
             self.wCsv.writerow([x, y, time])
-
-

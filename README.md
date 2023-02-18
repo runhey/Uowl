@@ -1,10 +1,9 @@
-![高清4K品质LOGO原色背景](https://runhey-img-stg1.oss-cn-chengdu.aliyuncs.com/img2/%E9%AB%98%E6%B8%854K%E5%93%81%E8%B4%A8LOGO%E5%8E%9F%E8%89%B2%E8%83%8C%E6%99%AF.png)
 
-
-<div align="center">痒痒鼠的全自动托管助手
-</div>
+![logo](https://runhey-img-stg1.oss-cn-chengdu.aliyuncs.com/img2/202302171623299.png)
 
 ## ❤为什么选择我们
+
+项目最新状态：[全新规划 · Issue #3 · runhey/Uowl (github.com)](https://github.com/runhey/Uowl/issues/3)
 
 - **自动托管**：设定好时间任务一整天可以去干其他的事情
 - **安全防封**
